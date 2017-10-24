@@ -89,8 +89,7 @@ namespace WebAPI.Controllers
             return Json(ret);
         }
 
-        [AllowAnonymous]
-        //  [JwtAuthentication]
+        [JwtAuthentication]
         [HttpPost]
         [Route("insertcoupon")]
         [SwaggerResponse(HttpStatusCode.OK, type: typeof(string), description: "Insert Coupon")]
@@ -108,7 +107,7 @@ namespace WebAPI.Controllers
             }
         }
 
-        [AllowAnonymous]
+        [JwtAuthentication]
         [HttpPost]
         [Route("insertawardedcoupon")]
         [SwaggerResponse(HttpStatusCode.OK, type: typeof(string), description: "Insert Aswarded Coupon")]
