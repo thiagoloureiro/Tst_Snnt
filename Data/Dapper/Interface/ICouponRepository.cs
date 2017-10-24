@@ -21,6 +21,8 @@ namespace Data.Dapper.Interface
 
         List<UserCoupon> GetAwardedCouponListReport();
 
+        List<UserCoupon> GetCouponListReport();
+
         bool CheckExistingCoupon(string code);
 
         bool CheckExistingAwardedCoupon(string code);

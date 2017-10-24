@@ -59,5 +59,19 @@ namespace WebAPI.Controllers
             }
             throw new HttpResponseException(HttpStatusCode.ExpectationFailed);
         }
+
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("userlist")]
+        [SwaggerResponse(HttpStatusCode.OK, type: typeof(string), description: "Return User List")]
+        public IHttpActionResult GetUserList()
+        {
+            var ret = _userService.GetUserList();
+
+            if (ret == null)
+                throw new HttpResponseException(HttpStatusCode.Unauthorized);
+
+            return Json(ret);
+        }
     }
 }

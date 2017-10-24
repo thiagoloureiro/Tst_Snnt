@@ -15,6 +15,11 @@ namespace Service.Class
             _couponRepository = couponRepository;
         }
 
+        public List<UserCoupon> GetCouponListReport()
+        {
+            return _couponRepository.GetCouponListReport();
+        }
+
         public bool CheckExistingCoupon(string code)
         {
             return _couponRepository.CheckExistingCoupon(code);

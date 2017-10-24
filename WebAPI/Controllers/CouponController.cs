@@ -75,6 +75,20 @@ namespace WebAPI.Controllers
             return Json(ret);
         }
 
+        [JwtAuthentication]
+        [HttpGet]
+        [Route("couponlistreport")]
+        [SwaggerResponse(HttpStatusCode.OK, type: typeof(string), description: "Return CouponList Report")]
+        public IHttpActionResult GetCouponListReport()
+        {
+            var ret = _couponService.GetCouponListReport();
+
+            if (ret == null)
+                throw new HttpResponseException(HttpStatusCode.Unauthorized);
+
+            return Json(ret);
+        }
+
         [AllowAnonymous]
         //  [JwtAuthentication]
         [HttpPost]

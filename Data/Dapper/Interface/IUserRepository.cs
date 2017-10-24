@@ -1,4 +1,5 @@
-﻿using Model;
+﻿using System.Collections.Generic;
+using Model;
 
 namespace Data.Dapper.Interface
 {
@@ -7,5 +8,7 @@ namespace Data.Dapper.Interface
         User ValidateUser(string username, string password);
 
         void InsertUser(string username, string password);
+
+        List<User> GetList();
     }
 }

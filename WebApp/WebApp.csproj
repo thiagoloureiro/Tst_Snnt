@@ -209,6 +209,9 @@
     <Content Include="Views\Home\Log.cshtml" />
     <Content Include="Views\Home\Register.cshtml" />
     <Content Include="Views\Home\RegisterAwarded.cshtml" />
+    <Content Include="Views\Home\UserList.cshtml" />
+    <Content Include="Views\Home\CupomListReport.cshtml" />
+    <Content Include="Views\Home\AwardedCupomListReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

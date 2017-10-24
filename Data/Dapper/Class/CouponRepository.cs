@@ -125,6 +125,31 @@ namespace Data.Dapper.Class
                 U.Admin, U.CPF, U.CreatedOn, U.Email, U.Name, U.Surname, U.LastLogon, U.Phone
                 from UserCoupon UC
                 inner join [User] U on U.Id = UC.UserId
+                left join Coupon C on C.Code = UC.Code
+                where UC.Code in (select Code from Coupon)";
+
+                ret = db.Query<UserCoupon, User, UserCoupon>(sql, (coupon, user) =>
+                    {
+                        coupon.User = user;
+                        return coupon;
+                    }, splitOn: "Admin",
+                    commandType: CommandType.Text).ToList();
+            }
+
+            return ret;
+        }
+
+        public List<UserCoupon> GetCouponListReport()
+        {
+            List<UserCoupon> ret;
+            using (var db = new SqlConnection(connstring))
+            {
+                const string sql = @"select UC.Id, UC.Code, UC.CreatedOn,
+                case WHEN C.Code is null then 'Não Premiado'
+                else 'Premiado' end as [Status],
+                U.Admin, U.CPF, U.CreatedOn, U.Email, U.Name, U.Surname, U.LastLogon, U.Phone
+                from UserCoupon UC
+                inner join [User] U on U.Id = UC.UserId
                 left join Coupon C on C.Code = UC.Code";
 
                 ret = db.Query<UserCoupon, User, UserCoupon>(sql, (coupon, user) =>

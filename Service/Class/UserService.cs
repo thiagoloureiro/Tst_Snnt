@@ -16,8 +16,7 @@ namespace Service.Class
 
         public List<User> GetUserList()
         {
-            var obj = new List<User>();
-            return obj;
+            return _userRepository.GetList();
         }
 
         public User GetToken(string username, string password)

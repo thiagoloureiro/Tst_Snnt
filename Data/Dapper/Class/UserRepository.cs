@@ -1,4 +1,5 @@
-﻿using Dapper;
+﻿using System.Collections.Generic;
+using Dapper;
 using Data.Dapper.Interface;
 using Model;
 using System.Data;
@@ -14,7 +15,7 @@ namespace Data.Dapper.Class
             User ret;
             using (var db = new SqlConnection(connstring))
             {
-                const string sql = @"select Id, [Name], Surname, Email, Phone, LastLogon, CreatedOn, ActivationCode, Admin
+                const string sql = @"select Id, [Name], Surname, Email, Phone, LastLogon, CreatedOn, ActivationCode, Admin, CPF
                 from [User] U
                 where [Login] = @Login and [Password] = @Password";
 
@@ -32,6 +33,21 @@ namespace Data.Dapper.Class
 
                 db.Execute(sql, new { Login = username, Password = password }, commandType: CommandType.Text);
             }
+        }
+
+        public List<User> GetList()
+        {
+            List<User> ret;
+            using (var db = new SqlConnection(connstring))
+            {
+                const string sql =
+                    @"select Id, [Name], Surname, Email, Phone, LastLogon, CreatedOn, ActivationCode, Admin, CPF
+                from [User]";
+
+                ret = db.Query<User>(sql, commandType: CommandType.Text).ToList();
+            }
+
+            return ret;
         }
     }
 }

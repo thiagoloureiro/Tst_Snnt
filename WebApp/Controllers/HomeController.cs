@@ -76,6 +76,45 @@ namespace WebApp.Controllers
             }
         }
 
+        public ActionResult UserList()
+        {
+            if (Session["User"] is null)
+            {
+                return View("Index");
+            }
+            else
+            {
+                var model = GetUserList();
+                return View("UserList", model);
+            }
+        }
+
+        public ActionResult CupomListReport()
+        {
+            if (Session["User"] is null)
+            {
+                return View("Index");
+            }
+            else
+            {
+                var model = GetCupomListReport();
+                return View("CupomListReport", model);
+            }
+        }
+
+        public ActionResult AwardedCupomListReport()
+        {
+            if (Session["User"] is null)
+            {
+                return View("Index");
+            }
+            else
+            {
+                var model = GetAwardedCupomListReport();
+                return View("AwardedCupomListReport", model);
+            }
+        }
+
         private ActionResult RefreshGrid()
         {
             var model = GetUserCoupons();
@@ -120,6 +159,8 @@ namespace WebApp.Controllers
                 return RefreshGridAwardedCode();
             }
         }
+
+        #region EndPoint Calls
 
         private bool RegisterAwardedCustomerCode(string code)
         {
@@ -242,6 +283,75 @@ namespace WebApp.Controllers
             return null;
         }
 
+        private List<User> GetUserList()
+        {
+            var client = new HttpClient { BaseAddress = new Uri(APIUrl) };
+
+            if (Session["User"] != null)
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", GetToken());
+
+                client.DefaultRequestHeaders.Accept.Add(
+                    new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var response = client.GetAsync($"api/user/userlist").Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var ret = response.Content.ReadAsStringAsync();
+                    var list = JsonConvert.DeserializeObject<List<User>>(ret.Result);
+                    return list;
+                }
+            }
+            return null;
+        }
+
+        private List<UserCoupon> GetCupomListReport()
+        {
+            var client = new HttpClient { BaseAddress = new Uri(APIUrl) };
+
+            if (Session["User"] != null)
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", GetToken());
+
+                client.DefaultRequestHeaders.Accept.Add(
+                    new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var response = client.GetAsync("api/coupon/couponlistreport").Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var ret = response.Content.ReadAsStringAsync();
+                    var list = JsonConvert.DeserializeObject<List<UserCoupon>>(ret.Result);
+                    return list;
+                }
+            }
+            return null;
+        }
+
+        private List<UserCoupon> GetAwardedCupomListReport()
+        {
+            var client = new HttpClient { BaseAddress = new Uri(APIUrl) };
+
+            if (Session["User"] != null)
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", GetToken());
+
+                client.DefaultRequestHeaders.Accept.Add(
+                    new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var response = client.GetAsync("api/coupon/awardedcouponlistreport").Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var ret = response.Content.ReadAsStringAsync();
+                    var list = JsonConvert.DeserializeObject<List<UserCoupon>>(ret.Result);
+                    return list;
+                }
+            }
+            return null;
+        }
+
         private int GetUserId()
         {
             int userId = ((User)Session["User"]).Id;
@@ -254,15 +364,6 @@ namespace WebApp.Controllers
             return token;
         }
 
-        private byte[] DownloadFile(int fileId)
-        {
-            var client = new HttpClient { BaseAddress = new Uri(APIUrl) };
-            HttpResponseMessage responseParent = client.GetAsync($"api/CSV/download?fileId={fileId}").Result;
-            if (responseParent.IsSuccessStatusCode)
-            {
-                return responseParent.Content.ReadAsByteArrayAsync().Result;
-            }
-            return null;
-        }
+        #endregion EndPoint Calls
     }
 }
