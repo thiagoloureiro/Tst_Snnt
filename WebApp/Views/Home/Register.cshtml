@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Model.UserCoupon>
+
+@{
+    ViewBag.Title = "Register";
+}
+
+<h3>Bem vindo! @Session["UserName"], aqui você consegue cadastrar e visualizar seus cupons.</h3>
+
+@using (Html.BeginForm("RegisterCode", "Home", FormMethod.Post))
+{
+    <input type="text" name="code" id="code" />
+    <input type="submit" value="Cadastro" />
+}
+@if (TempData["notice"] != null)
+{
+    <p>@TempData["notice"]</p>
+}
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Code)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreatedOn)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Code)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedOn)
+            </td>
+        </tr>
+    }
+</table>
